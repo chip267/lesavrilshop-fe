@@ -18,6 +18,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import React from "react";
 import LoginPage from "@/app/(routes)/(auth)/login/page";
 import { useState } from "react";
+import BagPage from "@/app/(routes)/bag/page";
 
 const Header = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -68,13 +69,7 @@ const Header = () => {
             placeholder="SEARCH"
           />
           <LoginPage />
-
-          <Button
-            className="bg-transparent shadow-none hover:bg-transparent h-6  rounded-full justify-center items-center"
-            size="icon"
-          >
-            <BagIcon />
-          </Button>
+          <BagPage />
         </div>
       </div>
       {isVisible && (
