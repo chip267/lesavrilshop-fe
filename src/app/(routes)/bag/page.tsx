@@ -25,6 +25,7 @@ const BagPage = () => {
         </Button>
       </SheetTrigger>
       <SheetContent>
+        <SheetTitle className="sr-only">My Cart</SheetTitle>
         <SheetHeader />
         <div className="items-center flex mt-6 mb-6 justify-between">
           <p className="font-medium text-[20px]">Basket</p>

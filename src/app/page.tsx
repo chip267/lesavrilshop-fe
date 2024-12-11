@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { AnimatePresence, motion } from "framer-motion/dist/framer-motion";
 import Head from "next/head";
 
 import {
