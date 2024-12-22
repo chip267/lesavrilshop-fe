@@ -2,6 +2,7 @@ import { AuthService } from "@/services/auth.service";
 import { User } from "@/types/user";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { useCartStore } from "./useCartStore";
 
 interface AuthResponse {
   success: boolean;
@@ -63,6 +64,8 @@ export const useAuthStore = create<AuthState>()(
 
       logout: async () => {
         await authService.logout();
+        // Clear the cart when logging out
+        useCartStore.getState().clearCart();
         set({
           user: null,
           token: null,

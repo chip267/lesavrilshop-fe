@@ -1,57 +1,82 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import BagIcon from "@/components/ui/icons/BagIcon";
-import LogoIcon from "@/components/ui/icons/LogoIcon";
-import UserIcon from "@/components/ui/icons/UserIcon";
-import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import React, { useEffect, useRef } from "react";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import React from "react";
+import { Input } from "@/components/ui/input";
 import LoginPage from "@/app/(routes)/(auth)/login/page";
-import { useState } from "react";
-import BagPage from "@/app/(routes)/bag/page";
+import LogoIcon from "@/components/ui/icons/LogoIcon";
+import { useRouter } from "next/navigation";
+import useCategoryStore from "@/store/useCategoryStore";
+import Cart from "@/app/(routes)/bag/page";
+import SearchInput from "../search/SearchInput";
+import Link from "next/link";
 
 const Header = () => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [isHover, setIsHover] = useState(false);
+  const {
+    categories,
+    activeParentCategory,
+    fetchCategories,
+    toggleParentCategory,
+    resetCategories,
+  } = useCategoryStore();
 
-  const handleMouseEnter = () => {
-    setIsVisible(true);
+  const router = useRouter();
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    fetchCategories();
+  }, [fetchCategories]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        resetCategories();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [resetCategories]);
+
+  const formatUrlSlug = (name: string): string => {
+    return name.toLowerCase().replace(/\s+/g, "-");
   };
-  const handleMouseLeave = () => {
-    setIsVisible(false);
+
+  const handleCategoryClick = (category: any) => {
+    toggleParentCategory(category);
   };
-  const handleHoverEnter = () => {
-    setIsHover(true);
+
+  const handleDetailedCategoryClick = (detailCategory: any) => {
+    if (activeParentCategory) {
+      const parentSlug = formatUrlSlug(activeParentCategory.name);
+      const categorySlug = formatUrlSlug(detailCategory.name);
+      router.push(`/${parentSlug}/${categorySlug}`);
+      resetCategories();
+    }
   };
-  const handleHoverLeave = () => {
-    setIsHover(false);
-  };
+
   return (
-    <div className="bg-background top-0 transition-all duration-300 fixed z-50 flex flex-col  w-full px-4">
+    <div className="bg-background top-0 transition-all duration-300 fixed z-50 flex flex-col w-full px-4">
       <div className="flex items-center justify-between">
         <div className="py-5 flex items-center justify-center">
-          <ToggleGroup type="single">
-            <ToggleGroupItem onMouseEnter={handleMouseEnter} value="women">
-              <span className="tracking-wider">WOMEN</span>
-            </ToggleGroupItem>
-            <ToggleGroupItem value="men">
-              <span className="tracking-wider ">MEN</span>
-            </ToggleGroupItem>
+          <ToggleGroup type="single" className="gap-6">
+            {categories.map((category) => (
+              <ToggleGroupItem
+                key={category.id}
+                value={category.name.toLowerCase()}
+                onClick={() => handleCategoryClick(category)}
+                className="text-sm tracking-wider"
+              >
+                {category.name.toUpperCase()}
+              </ToggleGroupItem>
+            ))}
             <ToggleGroupItem value="teen">
               <div className="w-[69px] h-[21px] items-center justify-center">
                 <img
                   src="/assets/images/img_logo_lsv_teen.png"
-                  alt="A beautiful scenery"
+                  alt="BSK Teen Logo"
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -59,39 +84,42 @@ const Header = () => {
           </ToggleGroup>
         </div>
 
-        <div className="mx-auto">
+        <Link href="/" className="mx-auto">
           <LogoIcon />
-        </div>
+        </Link>
 
         <div className="flex gap-3 items-center">
-          <Input
-            className="w-[160px] px-3 placeholder-black placeholder:text-[12px] font-light h-[32px] border-none bg-[#f5f5f5] shadow-none rounded-full"
-            placeholder="SEARCH"
-          />
+          <SearchInput />
           <LoginPage />
-          <BagPage />
+          <Cart />
         </div>
       </div>
-      {isVisible && (
+
+      {activeParentCategory && (
         <div
-          onMouseLeave={handleMouseLeave}
-          className="top-[-50px]  flex left-0 bg-white p-4 "
+          ref={dropdownRef}
+          className="absolute top-full left-0 w-full bg-white shadow-lg"
         >
-          <div className="flex flex-col gap-3 text-[12px] text-[#4C4A4A] ">
-            <span>NEWS</span>
-            <span
-              onMouseEnter={handleHoverEnter}
-              onMouseLeave={handleHoverLeave}
-              className="tracking-wider hover:text-gray-400 cursor-pointer"
-            >
-              CHLOTHES
-            </span>
-            <span className="tracking-wider">ACCESSORIES</span>
-            <span className="tracking-wider">GET THE LOOK</span>
+          <div className="grid grid-cols-4 gap-6 p-6">
+            {activeParentCategory.subcategories.map((subcat) => (
+              <div key={subcat.id} className="flex flex-col gap-4">
+                <h3 className="font-medium text-sm tracking-wide text-gray-400">
+                  {subcat.name.toUpperCase()}
+                </h3>
+                <div className="flex flex-col gap-2">
+                  {subcat.subcategories.map((detailCat) => (
+                    <button
+                      key={detailCat.id}
+                      onClick={() => handleDetailedCategoryClick(detailCat)}
+                      className="text-left text-sm text-gray-600 hover:text-black transition-colors"
+                    >
+                      {detailCat.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
-          {isHover && (
-            <div className="bg-slate-950 w-full ml-[60px]">Hihihihi</div>
-          )}
         </div>
       )}
     </div>

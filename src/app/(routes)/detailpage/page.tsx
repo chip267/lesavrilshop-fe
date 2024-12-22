@@ -105,12 +105,6 @@ const page = () => {
           </div>
         </div>
       </div>
-      <div className="mt-20 flex flex-col justify-center items-center">
-        <p className="font-semibold text-[25px] tracking-wide">
-          Get the look #LesavrilStyle
-        </p>
-        <CarouselLookComponent />
-      </div>
       <div className=" mt-20 flex flex-col justify-center items-center">
         <p className="font-light text-[25px] tracking-wide">
           You might be interested in

@@ -3,11 +3,10 @@ import {
   Sheet,
   SheetContent,
   SheetHeader,
+  SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
 import { RegisterForm } from "@/components/auth/RegisterForm";
 
 interface RegisterSheetProps {
@@ -29,7 +28,8 @@ const RegisterSheet: React.FC<RegisterSheetProps> = ({ triggerRef }) => {
         </Button>
       </SheetTrigger>
       <SheetContent>
-        <SheetHeader />
+        <SheetTitle className="sr-only">Register</SheetTitle>
+
         <div className="p-2 mt-6">
           <RegisterForm />
         </div>
