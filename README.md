@@ -28,13 +28,13 @@ An elegant e-commerce platform specializing in contemporary fashion, featuring p
 
 ### Backend
 - .NET 8.0+
-- SQL Server 2019+
+- PostgreSQL
 - RESTful API architecture
 - Authentication & Authorization
 
 ### Frontend
-- React.js 18.2.0+
-- Tailwind CSS
+- NextJS
+- ShadcnUI
 - Redux for state management
 - Responsive design principles
 
@@ -110,8 +110,3 @@ STRIPE_KEY=your_stripe_key
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
 
-## 📧 Contact
-
-Project Link: [https://github.com/yourusername/stylehub](https://github.com/yourusername/stylehub)
-
-For support or queries, please email us at: support@stylehub.com
