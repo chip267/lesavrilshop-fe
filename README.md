@@ -55,7 +55,7 @@ An elegant e-commerce platform specializing in contemporary fashion, featuring p
 
 1. Clone the repository
 ```bash
-git clone [https://github.com/yourusername/stylehub.git](https://github.com/chip267/lesavrilshop-fe)
+git clone (https://github.com/chip267/lesavrilshop-fe)
 cd stylehub
 ```
 
