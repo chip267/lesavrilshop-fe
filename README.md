@@ -76,17 +76,6 @@ dotnet restore
 dotnet ef database update
 ```
 
-5. Start the development server
-```bash
-# Terminal 1 - Frontend
-cd ClientApp
-npm run dev
-
-# Terminal 2 - Backend
-cd Server
-dotnet run
-```
-
 The application will be available at `http://localhost:3000` (frontend) and `http://localhost:5000` (backend API).
 
 ## 📝 Configuration
